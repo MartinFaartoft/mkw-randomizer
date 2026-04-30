@@ -28,36 +28,39 @@ The user interface should contain the following
 - A separate button to pick a random combo, that is displayed in a modal popup that dismisses after clicking outside it. The popup should pick a random combo when opening, and have a button to pick again.
 
 ## List of tracks
-- Acorn Heights
-- Airship Fortress
-- Boo Cinema
-- Bowser's Castle
-- Cheep Cheep Falls
-- Choco Mountain
-- Crown City
-- Dandelion Depths
-- Desert Hills
-- Dino Dino Jungle
-- DK Pass
-- DK Spaceport
-- Dry Bones Burnout
-- Faraway Oasis
-- Great ? Block Ruins
-- Koopa Troopa Beach
-- Mario Bros. Circuit
-- Mario Circuit
-- Moo Moo Meadows
-- Peach Beach
-- Peach Stadium
-- Rainbow Road
-- Salty Salty Speedway
-- Shy Guy Bazaar
-- Sky-High Sundae
-- Starview Peak
-- Toad's Factory
-- Wario Stadium
-- Wario's Galleon
-- Whistlestop Summit
+
+| Track | Region | Compass Direction |
+|---|---|---|
+| Acorn Heights | Forest | N |
+| Airship Fortress | Volcano | NW |
+| Boo Cinema | Forest | N |
+| Bowser's Castle | Volcano | NW |
+| Cheep Cheep Falls | Central | C |
+| Choco Mountain | Central | C |
+| Crown City | South Coast | S |
+| Dandelion Depths | Central | C |
+| Desert Hills | Desert | W |
+| Dino Dino Jungle | Jungle | SE |
+| DK Pass | Snow | NE |
+| DK Spaceport | South Coast | S |
+| Dry Bones Burnout | Volcano | NW |
+| Faraway Oasis | South Coast | S |
+| Great ? Block Ruins | Jungle | SE |
+| Koopa Troopa Beach | South Coast | S |
+| Mario Bros. Circuit | Badlands | SW |
+| Mario Circuit | Forest | N |
+| Moo Moo Meadows | Central | C |
+| Peach Beach | East Coast | E |
+| Peach Stadium | Central | C |
+| Rainbow Road | Central | C |
+| Salty Salty Speedway | East Coast | E |
+| Shy Guy Bazaar | Desert | W |
+| Sky-High Sundae | Snow | NE |
+| Starview Peak | Snow | NE |
+| Toad's Factory | Volcano | NW |
+| Wario Stadium | Badlands | SW |
+| Wario's Galleon | East Coast | E |
+| Whistlestop Summit | Badlands | SW |
 
 ## List of characters
 - Mario

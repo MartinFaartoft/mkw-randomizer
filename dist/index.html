@@ -101,6 +101,13 @@
       letter-spacing: 1px;
     }
 
+    .hero-location {
+      margin-top: 10px;
+      font-size: 1.3rem;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 1px;
+    }
+
     .hero-complete {
       font-size: 1rem;
       font-weight: 700;
@@ -313,6 +320,7 @@
     <div class="hero" id="hero">
       <div class="hero-label" id="hero-label">Current Track</div>
       <div class="hero-track empty" id="hero-track">Roll to pick the first track</div>
+      <div class="hero-location" id="hero-location"></div>
     </div>
 
     <div class="buttons">
@@ -385,6 +393,23 @@
 
     const STORAGE_KEY = 'mkw_randomizer_state';
 
+    const DIR_EMOJI = {
+      "N": "⬆️", "NE": "↗️", "E": "➡️", "SE": "↘️",
+      "S": "⬇️", "SW": "↙️", "W": "⬅️", "NW": "↖️", "C": "🎯",
+    };
+
+    const REGION_EMOJI = {
+      "Forest":      "🌲",
+      "Volcano":     "🌋",
+      "Central":     "🌾",
+      "Desert":      "🏜️",
+      "Jungle":      "🌴",
+      "Snow":        "❄️",
+      "South Coast": "🏖️",
+      "East Coast":  "🌊",
+      "Badlands":    "🪨",
+    };
+
     function shuffle(arr) {
       const a = [...arr];
       for (let i = a.length - 1; i > 0; i--) {
@@ -431,20 +456,25 @@
       // Hero
       const heroTrack = document.getElementById('hero-track');
       const heroLabel = document.getElementById('hero-label');
+      const heroLocation = document.getElementById('hero-location');
 
       if (done && picked.length > 0) {
         heroLabel.textContent = 'All Done!';
         heroTrack.className = 'hero-track hero-complete';
         heroTrack.textContent = '🏁 All tracks completed!';
+        heroLocation.textContent = '';
       } else if (picked.length === 0) {
         heroLabel.textContent = 'Current Track';
         heroTrack.className = 'hero-track empty';
         heroTrack.textContent = 'Roll to pick the first track';
+        heroLocation.textContent = '';
       } else {
         heroLabel.textContent = 'Current Track';
         heroTrack.className = 'hero-track';
         const t = picked[picked.length - 1];
         heroTrack.textContent = `${TRACK_EMOJI[t] ?? '🏁'} ${t}`;
+        const info = TRACK_INFO[t];
+        heroLocation.textContent = info ? `${REGION_EMOJI[info.region] ?? '📍'} · ${DIR_EMOJI[info.dir] ?? info.dir}` : '';
       }
 
       // Roll button
@@ -490,6 +520,39 @@
       "Rainbow Road": "🌈", "Salty Salty Speedway": "🌊", "Shy Guy Bazaar": "🎭",
       "Sky-High Sundae": "🍦", "Starview Peak": "⭐", "Toad's Factory": "🏭",
       "Wario Stadium": "💰", "Wario's Galleon": "⛵", "Whistlestop Summit": "🚂",
+    };
+
+    const TRACK_INFO = {
+      "Acorn Heights":        { region: "Forest",      dir: "N" },
+      "Airship Fortress":     { region: "Volcano",     dir: "NW" },
+      "Boo Cinema":           { region: "Forest",      dir: "N" },
+      "Bowser's Castle":      { region: "Volcano",     dir: "NW" },
+      "Cheep Cheep Falls":    { region: "Central",     dir: "C" },
+      "Choco Mountain":       { region: "Central",     dir: "C" },
+      "Crown City":           { region: "South Coast", dir: "S" },
+      "Dandelion Depths":     { region: "Central",     dir: "C" },
+      "Desert Hills":         { region: "Desert",      dir: "W" },
+      "Dino Dino Jungle":     { region: "Jungle",      dir: "SE" },
+      "DK Pass":              { region: "Snow",        dir: "NE" },
+      "DK Spaceport":         { region: "South Coast", dir: "S" },
+      "Dry Bones Burnout":    { region: "Volcano",     dir: "NW" },
+      "Faraway Oasis":        { region: "South Coast", dir: "S" },
+      "Great ? Block Ruins":  { region: "Jungle",      dir: "SE" },
+      "Koopa Troopa Beach":   { region: "South Coast", dir: "S" },
+      "Mario Bros. Circuit":  { region: "Badlands",    dir: "SW" },
+      "Mario Circuit":        { region: "Forest",      dir: "N" },
+      "Moo Moo Meadows":      { region: "Central",     dir: "C" },
+      "Peach Beach":          { region: "East Coast",  dir: "E" },
+      "Peach Stadium":        { region: "Central",     dir: "C" },
+      "Rainbow Road":         { region: "Central",     dir: "C" },
+      "Salty Salty Speedway": { region: "East Coast",  dir: "E" },
+      "Shy Guy Bazaar":       { region: "Desert",      dir: "W" },
+      "Sky-High Sundae":      { region: "Snow",        dir: "NE" },
+      "Starview Peak":        { region: "Snow",        dir: "NE" },
+      "Toad's Factory":       { region: "Volcano",     dir: "NW" },
+      "Wario Stadium":        { region: "Badlands",    dir: "SW" },
+      "Wario's Galleon":      { region: "East Coast",  dir: "E" },
+      "Whistlestop Summit":   { region: "Badlands",    dir: "SW" },
     };
 
     const CHARACTER_EMOJI = {
