@@ -343,7 +343,8 @@
         list.appendChild(empty);
       } else {
         list.innerHTML = '';
-        picked.forEach((track, i) => {
+        picked.slice().reverse().forEach((track, ri) => {
+          const i = picked.length - 1 - ri;
           const li = document.createElement('li');
           if (i === picked.length - 1) li.classList.add('latest');
           const num = document.createElement('span');
