@@ -1,1 +1,366 @@
-MKW RANDOMIZER - now with 67% more randomness!
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MKW Randomizer</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #1a0a2e;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      width: 100%;
+      background: linear-gradient(135deg, #e60012, #cc0010);
+      padding: 16px 20px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      position: relative;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #ffe600;
+      text-shadow: 2px 2px 0 #c00, -1px -1px 0 #c00;
+    }
+
+    header p {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.7);
+      margin-top: 2px;
+      letter-spacing: 1px;
+    }
+
+    main {
+      width: 100%;
+      max-width: 480px;
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, #2a1a4e, #3a2060);
+      border: 3px solid #ffe600;
+      border-radius: 16px;
+      padding: 24px 20px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(255,230,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
+      min-height: 130px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-label {
+      font-size: 0.65rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #ffe600;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .hero-track {
+      font-size: 1.6rem;
+      font-weight: 900;
+      line-height: 1.2;
+      color: #fff;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+
+    .hero-track.empty {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.4);
+      font-weight: 400;
+      font-style: italic;
+    }
+
+    .hero-counter {
+      margin-top: 10px;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 1px;
+    }
+
+    .hero-complete {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #ffe600;
+      text-shadow: 0 0 12px rgba(255,230,0,0.6);
+    }
+
+    /* Buttons */
+    .buttons {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 16px 10px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.1s, opacity 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn:active {
+      transform: scale(0.96);
+    }
+
+    .btn-roll {
+      background: linear-gradient(180deg, #ffe600 0%, #f5c800 100%);
+      color: #1a0a2e;
+      box-shadow: 0 4px 0 #c8a000, 0 6px 12px rgba(0,0,0,0.4);
+    }
+
+    .btn-roll:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-reset {
+      background: linear-gradient(180deg, #555, #444);
+      color: #ccc;
+      box-shadow: 0 4px 0 #222, 0 6px 12px rgba(0,0,0,0.4);
+      flex: 0 0 auto;
+      padding: 16px 20px;
+      font-size: 0.85rem;
+    }
+
+    /* History */
+    .history-section {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .history-label {
+      font-size: 0.65rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      font-weight: 700;
+    }
+
+    .history-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .history-list li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.75);
+      border-left: 3px solid transparent;
+    }
+
+    .history-list li.latest {
+      border-left-color: #ffe600;
+      color: #fff;
+      background: rgba(255,230,0,0.08);
+    }
+
+    .history-num {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.3);
+      font-weight: 700;
+      min-width: 20px;
+      text-align: right;
+    }
+
+    .history-empty {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.25);
+      font-style: italic;
+      padding: 8px 0;
+    }
+
+    @media (max-width: 360px) {
+      .hero-track { font-size: 1.3rem; }
+      header h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>MKW Randomizer</h1>
+    <p id="session-info"></p>
+  </header>
+
+  <main>
+    <div class="hero" id="hero">
+      <div class="hero-label" id="hero-label">Current Track</div>
+      <div class="hero-track empty" id="hero-track">Roll to pick the first track</div>
+      <div class="hero-counter" id="hero-counter"></div>
+    </div>
+
+    <div class="buttons">
+      <button class="btn btn-roll" id="btn-roll" onclick="roll()">Roll</button>
+      <button class="btn btn-reset" id="btn-reset" onclick="resetSession()">Reset</button>
+    </div>
+
+    <div class="history-section" id="history-section">
+      <div class="history-label">History</div>
+      <ul class="history-list" id="history-list">
+        <li class="history-empty" id="history-empty">No tracks picked yet</li>
+      </ul>
+    </div>
+  </main>
+
+  <script>
+    const TRACKS = [
+      "Acorn Heights", "Airship Fortress", "Boo Cinema", "Bowser's Castle",
+      "Cheep Cheep Falls", "Choco Mountain", "Crown City", "Dandelion Depths",
+      "Desert Hills", "Dino Dino Jungle", "DK Pass", "DK Spaceport",
+      "Dry Bones Burnout", "Faraway Oasis", "Great ? Block Ruins",
+      "Koopa Troopa Beach", "Mario Bros. Circuit", "Mario Circuit",
+      "Moo Moo Meadows", "Peach Beach", "Peach Stadium", "Rainbow Road",
+      "Salty Salty Speedway", "Shy Guy Bazaar", "Sky-High Sundae",
+      "Starview Peak", "Toad's Factory", "Wario Stadium", "Wario's Galleon",
+      "Whistlestop Summit"
+    ];
+
+    const STORAGE_KEY = 'mkw_randomizer_state';
+
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) return JSON.parse(raw);
+      } catch {}
+      return null;
+    }
+
+    function saveState(state) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function newSession() {
+      return { picked: [], remaining: shuffle(TRACKS) };
+    }
+
+    function roll() {
+      if (state.remaining.length === 0) return;
+      const track = state.remaining.pop();
+      state.picked.push(track);
+      saveState(state);
+      render();
+    }
+
+    function resetSession() {
+      state = newSession();
+      saveState(state);
+      render();
+    }
+
+    function render() {
+      const total = TRACKS.length;
+      const picked = state.picked;
+      const done = state.remaining.length === 0;
+
+      // Hero
+      const heroTrack = document.getElementById('hero-track');
+      const heroLabel = document.getElementById('hero-label');
+      const heroCounter = document.getElementById('hero-counter');
+
+      if (done && picked.length > 0) {
+        heroLabel.textContent = 'All Done!';
+        heroTrack.className = 'hero-track hero-complete';
+        heroTrack.textContent = '🏁 All tracks completed!';
+        heroCounter.textContent = `${total} / ${total} tracks`;
+      } else if (picked.length === 0) {
+        heroLabel.textContent = 'Current Track';
+        heroTrack.className = 'hero-track empty';
+        heroTrack.textContent = 'Roll to pick the first track';
+        heroCounter.textContent = '';
+      } else {
+        heroLabel.textContent = 'Current Track';
+        heroTrack.className = 'hero-track';
+        heroTrack.textContent = picked[picked.length - 1];
+        heroCounter.textContent = `${picked.length} / ${total} tracks`;
+      }
+
+      // Roll button
+      document.getElementById('btn-roll').disabled = done;
+
+      // Session info in header
+      document.getElementById('session-info').textContent =
+        picked.length === 0 ? `${total} tracks · ready` :
+        done ? 'Session complete' :
+        `${state.remaining.length} track${state.remaining.length !== 1 ? 's' : ''} remaining`;
+
+      // History
+      const list = document.getElementById('history-list');
+      const emptyItem = document.getElementById('history-empty');
+
+      if (picked.length === 0) {
+        list.innerHTML = '';
+        const empty = document.createElement('li');
+        empty.id = 'history-empty';
+        empty.className = 'history-empty';
+        empty.textContent = 'No tracks picked yet';
+        list.appendChild(empty);
+      } else {
+        list.innerHTML = '';
+        picked.forEach((track, i) => {
+          const li = document.createElement('li');
+          if (i === picked.length - 1) li.classList.add('latest');
+          const num = document.createElement('span');
+          num.className = 'history-num';
+          num.textContent = i + 1;
+          const name = document.createElement('span');
+          name.textContent = track;
+          li.appendChild(num);
+          li.appendChild(name);
+          list.appendChild(li);
+        });
+      }
+    }
+
+    let state = loadState() || newSession();
+    saveState(state);
+    render();
+  </script>
+</body>
+</html>
