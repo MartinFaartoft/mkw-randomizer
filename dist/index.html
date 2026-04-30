@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MKW Randomizer</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏎️</text></svg>">
   <style>
     * {
       box-sizing: border-box;
@@ -427,8 +428,26 @@
       return null;
     }
 
+    function encodeState(state) {
+      const p = state.picked.map(t => TRACKS.indexOf(t)).join(',');
+      const r = state.remaining.map(t => TRACKS.indexOf(t)).join(',');
+      return `#s=${p}|${r}`;
+    }
+
+    function decodeState(hash) {
+      try {
+        const match = hash.match(/^#s=([^|]*)\|(.*)$/);
+        if (!match) return null;
+        const picked = match[1] ? match[1].split(',').map(i => TRACKS[+i]).filter(Boolean) : [];
+        const remaining = match[2] ? match[2].split(',').map(i => TRACKS[+i]).filter(Boolean) : [];
+        if (picked.length + remaining.length === 0) return null;
+        return { picked, remaining };
+      } catch { return null; }
+    }
+
     function saveState(state) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      history.replaceState(null, '', encodeState(state));
     }
 
     function newSession() {
@@ -611,7 +630,7 @@
       if (e.target === document.getElementById('modal-backdrop')) closeCombo();
     }
 
-    let state = loadState() || newSession();
+    let state = decodeState(location.hash) || loadState() || newSession();
     saveState(state);
     render();
   </script>
