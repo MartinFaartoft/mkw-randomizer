@@ -126,6 +126,7 @@
       cursor: pointer;
       transition: transform 0.1s, box-shadow 0.1s, opacity 0.2s;
       -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
 
     .btn:active {
@@ -306,18 +307,16 @@
 <body>
   <header>
     <h1>MKW Randomizer</h1>
-    <p id="session-info"></p>
   </header>
 
   <main>
     <div class="hero" id="hero">
       <div class="hero-label" id="hero-label">Current Track</div>
       <div class="hero-track empty" id="hero-track">Roll to pick the first track</div>
-      <div class="hero-counter" id="hero-counter"></div>
     </div>
 
     <div class="buttons">
-      <button class="btn btn-roll" id="btn-roll" onclick="roll()">Roll</button>
+      <button class="btn btn-roll" id="btn-roll" onclick="roll()">🎲 Roll</button>
       <button class="btn btn-combo" id="btn-combo" onclick="openCombo()">Combo</button>
       <button class="btn btn-reset" id="btn-reset" onclick="resetSession()">Reset</button>
     </div>
@@ -336,7 +335,7 @@
           <div class="combo-row-value" id="combo-vehicle"></div>
         </div>
       </div>
-      <button class="btn btn-reroll" onclick="rollCombo()">Roll Again</button>
+      <button class="btn btn-reroll" onclick="rollCombo()">🎲 Roll Again</button>
     </div>
   </div>
 
@@ -426,40 +425,29 @@
     }
 
     function render() {
-      const total = TRACKS.length;
       const picked = state.picked;
       const done = state.remaining.length === 0;
 
       // Hero
       const heroTrack = document.getElementById('hero-track');
       const heroLabel = document.getElementById('hero-label');
-      const heroCounter = document.getElementById('hero-counter');
 
       if (done && picked.length > 0) {
         heroLabel.textContent = 'All Done!';
         heroTrack.className = 'hero-track hero-complete';
         heroTrack.textContent = '🏁 All tracks completed!';
-        heroCounter.textContent = `${total} / ${total} tracks`;
       } else if (picked.length === 0) {
         heroLabel.textContent = 'Current Track';
         heroTrack.className = 'hero-track empty';
         heroTrack.textContent = 'Roll to pick the first track';
-        heroCounter.textContent = '';
       } else {
         heroLabel.textContent = 'Current Track';
         heroTrack.className = 'hero-track';
         heroTrack.textContent = picked[picked.length - 1];
-        heroCounter.textContent = `${picked.length} / ${total} tracks`;
       }
 
       // Roll button
       document.getElementById('btn-roll').disabled = done;
-
-      // Session info in header
-      document.getElementById('session-info').textContent =
-        picked.length === 0 ? `${total} tracks · ready` :
-        done ? 'Session complete' :
-        `${state.remaining.length} track${state.remaining.length !== 1 ? 's' : ''} remaining`;
 
       // History
       const list = document.getElementById('history-list');
