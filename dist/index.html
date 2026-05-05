@@ -351,46 +351,79 @@
     <div class="history-section" id="history-section">
       <div class="history-label">History</div>
       <ul class="history-list" id="history-list">
-        <li class="history-empty" id="history-empty">No tracks picked yet</li>
+        <li class="history-empty">No tracks picked yet</li>
       </ul>
     </div>
   </main>
 
   <script>
-    const CHARACTERS = [
-      "Mario", "Luigi", "Peach", "Bowser", "Yoshi", "Toad", "Daisy", "Rosalina",
-      "Donkey Kong", "Wario", "Koopa Troopa", "Pauline", "Waluigi", "Toadette",
-      "Baby Mario", "Baby Luigi", "Baby Peach", "Baby Daisy", "Baby Rosalina",
-      "Bowser Jr.", "Lakitu", "King Boo", "Shy Guy", "Birdo", "Dry Bones",
-      "Wiggler", "Hammer Bro", "Chargin' Chuck", "Nabbit", "Monty Mole",
-      "Goomba", "Piranha Plant", "Pianta", "Spike", "Dolphin", "Cow", "Pokey",
-      "Para-Biddybud", "Penguin", "Sidestepper", "Snowman", "Cataquack",
-      "Fish Bone", "Peepa", "Swoop", "Stingby", "Rocky Wrench", "Coin Coffer",
-      "Cheep Cheep", "Conkdor"
-    ];
+    const TRACK_DATA = {
+      "Acorn Heights":        { emoji: "🌰", region: "Forest",      dir: "N"  },
+      "Airship Fortress":     { emoji: "🛸", region: "Volcano",     dir: "NW" },
+      "Boo Cinema":           { emoji: "👻", region: "Forest",      dir: "N"  },
+      "Bowser's Castle":      { emoji: "🏰", region: "Volcano",     dir: "NW" },
+      "Cheep Cheep Falls":    { emoji: "🐟", region: "Central",     dir: "C"  },
+      "Choco Mountain":       { emoji: "🍫", region: "Central",     dir: "C"  },
+      "Crown City":           { emoji: "👑", region: "South Coast", dir: "S"  },
+      "Dandelion Depths":     { emoji: "🌼", region: "Central",     dir: "C"  },
+      "Desert Hills":         { emoji: "🏜️", region: "Desert",      dir: "W"  },
+      "Dino Dino Jungle":     { emoji: "🦕", region: "Jungle",      dir: "SE" },
+      "DK Pass":              { emoji: "🦍", region: "Snow",        dir: "NE" },
+      "DK Spaceport":         { emoji: "🚀", region: "South Coast", dir: "S"  },
+      "Dry Bones Burnout":    { emoji: "💀", region: "Volcano",     dir: "NW" },
+      "Faraway Oasis":        { emoji: "🌴", region: "South Coast", dir: "S"  },
+      "Great ? Block Ruins":  { emoji: "❓", region: "Jungle",      dir: "SE" },
+      "Koopa Troopa Beach":   { emoji: "🐢", region: "South Coast", dir: "S"  },
+      "Mario Bros. Circuit":  { emoji: "🍄", region: "Badlands",    dir: "SW" },
+      "Mario Circuit":        { emoji: "🍄", region: "Forest",      dir: "N"  },
+      "Moo Moo Meadows":      { emoji: "🐄", region: "Central",     dir: "C"  },
+      "Peach Beach":          { emoji: "🍑", region: "East Coast",  dir: "E"  },
+      "Peach Stadium":        { emoji: "🏟️", region: "Central",     dir: "C"  },
+      "Rainbow Road":         { emoji: "🌈", region: "Central",     dir: "C"  },
+      "Salty Salty Speedway": { emoji: "🌊", region: "East Coast",  dir: "E"  },
+      "Shy Guy Bazaar":       { emoji: "🎭", region: "Desert",      dir: "W"  },
+      "Sky-High Sundae":      { emoji: "🍦", region: "Snow",        dir: "NE" },
+      "Starview Peak":        { emoji: "⭐", region: "Snow",        dir: "NE" },
+      "Toad's Factory":       { emoji: "🏭", region: "Volcano",     dir: "NW" },
+      "Wario Stadium":        { emoji: "💰", region: "Badlands",    dir: "SW" },
+      "Wario's Galleon":      { emoji: "⛵", region: "East Coast",  dir: "E"  },
+      "Whistlestop Summit":   { emoji: "🚂", region: "Badlands",    dir: "SW" },
+    };
+    const TRACKS = Object.keys(TRACK_DATA);
 
-    const VEHICLES = [
-      "Standard Kart", "Plushbuggy", "Zoom Buggy", "Rally Kart", "Baby Blooper",
-      "Chargin' Truck", "Blastronaut III", "Roadster Royale", "Carpet Flyer",
-      "Billdozer", "Big Horn", "Hot Rod", "Snowmobile", "Frog Kart", "Old Timey",
-      "Toy Truck", "Green Saucer", "Pipe Frame", "B Dasher", "Tiny Titan / Rally Romper",
-      "Bumble V", "Cloud 9", "Biddybuggy", "Standard Bike", "Cute Scoot",
-      "Rally Bike", "Mach Rocket", "W-Twin Chopper", "Fin Twin", "Mario Bros. Bike",
-      "Radio Bike", "Train Bike", "R. O. B. Bike", "Dolphin Dasher", "Bowser Bruiser",
-      "Funky Dorrie", "Lobster", "Trike", "ATV Ski", "ATV Tread"
-    ];
+    const CHARACTER_DATA = {
+      "Mario": "🍄", "Luigi": "💚", "Peach": "👸", "Bowser": "🐉",
+      "Yoshi": "🦎", "Toad": "🍄", "Daisy": "🌼", "Rosalina": "⭐",
+      "Donkey Kong": "🦍", "Wario": "💰", "Koopa Troopa": "🐢", "Pauline": "🎤",
+      "Waluigi": "💜", "Toadette": "🎀", "Baby Mario": "👶", "Baby Luigi": "👶",
+      "Baby Peach": "👶", "Baby Daisy": "👶", "Baby Rosalina": "👶", "Bowser Jr.": "🐢",
+      "Lakitu": "☁️", "King Boo": "👻", "Shy Guy": "🎭", "Birdo": "🎀",
+      "Dry Bones": "💀", "Wiggler": "🐛", "Hammer Bro": "🔨", "Chargin' Chuck": "🏈",
+      "Nabbit": "🐇", "Monty Mole": "🐾", "Goomba": "🍄", "Piranha Plant": "🌿",
+      "Pianta": "🌴", "Spike": "🔵", "Dolphin": "🐬", "Cow": "🐄",
+      "Pokey": "🌵", "Para-Biddybud": "🦋", "Penguin": "🐧", "Sidestepper": "🦀",
+      "Snowman": "⛄", "Cataquack": "🐤", "Fish Bone": "🐟", "Peepa": "👻",
+      "Swoop": "🦇", "Stingby": "🐝", "Rocky Wrench": "🔧", "Coin Coffer": "💰",
+      "Cheep Cheep": "🐠", "Conkdor": "🦅",
+    };
+    const CHARACTERS = Object.keys(CHARACTER_DATA);
 
-    const TRACKS = [
-      "Acorn Heights", "Airship Fortress", "Boo Cinema", "Bowser's Castle",
-      "Cheep Cheep Falls", "Choco Mountain", "Crown City", "Dandelion Depths",
-      "Desert Hills", "Dino Dino Jungle", "DK Pass", "DK Spaceport",
-      "Dry Bones Burnout", "Faraway Oasis", "Great ? Block Ruins",
-      "Koopa Troopa Beach", "Mario Bros. Circuit", "Mario Circuit",
-      "Moo Moo Meadows", "Peach Beach", "Peach Stadium", "Rainbow Road",
-      "Salty Salty Speedway", "Shy Guy Bazaar", "Sky-High Sundae",
-      "Starview Peak", "Toad's Factory", "Wario Stadium", "Wario's Galleon",
-      "Whistlestop Summit"
-    ];
+    const VEHICLE_DATA = {
+      "Standard Kart": "🏎️", "Plushbuggy": "🚗", "Zoom Buggy": "🏎️",
+      "Rally Kart": "🏎️", "Baby Blooper": "🦑", "Chargin' Truck": "🚚",
+      "Blastronaut III": "🚀", "Roadster Royale": "🏎️", "Carpet Flyer": "🧹",
+      "Billdozer": "🚜", "Big Horn": "🚛", "Hot Rod": "🔥", "Snowmobile": "🛷",
+      "Frog Kart": "🐸", "Old Timey": "🚗", "Toy Truck": "🧸", "Green Saucer": "🛸",
+      "Pipe Frame": "🔧", "B Dasher": "🏎️", "Tiny Titan / Rally Romper": "🚗",
+      "Bumble V": "🐝", "Cloud 9": "☁️", "Biddybuggy": "🐞",
+      "Standard Bike": "🏍️", "Cute Scoot": "🛵", "Rally Bike": "🏍️",
+      "Mach Rocket": "🚀", "W-Twin Chopper": "🚁", "Fin Twin": "🏍️",
+      "Mario Bros. Bike": "🏍️", "Radio Bike": "📻", "Train Bike": "🚂",
+      "R. O. B. Bike": "🤖", "Dolphin Dasher": "🐬", "Bowser Bruiser": "🐢",
+      "Funky Dorrie": "🏄", "Lobster": "🦞", "Trike": "🚲",
+      "ATV Ski": "⛷️", "ATV Tread": "🚜",
+    };
+    const VEHICLES = Object.keys(VEHICLE_DATA);
 
     const STORAGE_KEY = 'mkw_randomizer_state';
 
@@ -409,6 +442,17 @@
       "South Coast": "🏖️",
       "East Coast":  "🌊",
       "Badlands":    "🪨",
+    };
+
+    const els = {
+      heroTrack:      document.getElementById('hero-track'),
+      heroLabel:      document.getElementById('hero-label'),
+      heroLocation:   document.getElementById('hero-location'),
+      btnRoll:        document.getElementById('btn-roll'),
+      historyList:    document.getElementById('history-list'),
+      comboCharacter: document.getElementById('combo-character'),
+      comboVehicle:   document.getElementById('combo-vehicle'),
+      modalBackdrop:  document.getElementById('modal-backdrop'),
     };
 
     function shuffle(arr) {
@@ -472,139 +516,49 @@
       const picked = state.picked;
       const done = state.remaining.length === 0;
 
-      // Hero
-      const heroTrack = document.getElementById('hero-track');
-      const heroLabel = document.getElementById('hero-label');
-      const heroLocation = document.getElementById('hero-location');
-
       if (done && picked.length > 0) {
-        heroLabel.textContent = 'All Done!';
-        heroTrack.className = 'hero-track hero-complete';
-        heroTrack.textContent = '🏁 All tracks completed!';
-        heroLocation.textContent = '';
+        els.heroLabel.textContent = 'All Done!';
+        els.heroTrack.className = 'hero-track hero-complete';
+        els.heroTrack.textContent = '🏁 All tracks completed!';
+        els.heroLocation.textContent = '';
       } else if (picked.length === 0) {
-        heroLabel.textContent = 'Current Track';
-        heroTrack.className = 'hero-track empty';
-        heroTrack.textContent = 'Roll to pick the first track';
-        heroLocation.textContent = '';
+        els.heroLabel.textContent = 'Current Track';
+        els.heroTrack.className = 'hero-track empty';
+        els.heroTrack.textContent = 'Roll to pick the first track';
+        els.heroLocation.textContent = '';
       } else {
-        heroLabel.textContent = 'Current Track';
-        heroTrack.className = 'hero-track';
+        els.heroLabel.textContent = 'Current Track';
+        els.heroTrack.className = 'hero-track';
         const t = picked[picked.length - 1];
-        heroTrack.textContent = `${TRACK_EMOJI[t] ?? '🏁'} ${t}`;
-        const info = TRACK_INFO[t];
-        heroLocation.textContent = info ? `${REGION_EMOJI[info.region] ?? '📍'} · ${DIR_EMOJI[info.dir] ?? info.dir}` : '';
+        const info = TRACK_DATA[t];
+        els.heroTrack.textContent = `${info?.emoji ?? '🏁'} ${t}`;
+        els.heroLocation.textContent = info ? `${REGION_EMOJI[info.region] ?? '📍'} · ${DIR_EMOJI[info.dir] ?? info.dir}` : '';
       }
 
-      // Roll button
-      document.getElementById('btn-roll').disabled = done;
+      els.btnRoll.disabled = done;
 
-      // History
-      const list = document.getElementById('history-list');
-      const emptyItem = document.getElementById('history-empty');
-
+      els.historyList.innerHTML = '';
       if (picked.length === 0) {
-        list.innerHTML = '';
         const empty = document.createElement('li');
-        empty.id = 'history-empty';
         empty.className = 'history-empty';
         empty.textContent = 'No tracks picked yet';
-        list.appendChild(empty);
+        els.historyList.appendChild(empty);
       } else {
-        list.innerHTML = '';
-        picked.slice().reverse().forEach((track, ri) => {
-          const i = picked.length - 1 - ri;
+        for (let i = picked.length - 1; i >= 0; i--) {
+          const track = picked[i];
           const li = document.createElement('li');
           if (i === picked.length - 1) li.classList.add('latest');
           const num = document.createElement('span');
           num.className = 'history-num';
           num.textContent = i + 1;
           const name = document.createElement('span');
-          name.textContent = `${TRACK_EMOJI[track] ?? '🏁'} ${track}`;
+          name.textContent = `${TRACK_DATA[track]?.emoji ?? '🏁'} ${track}`;
           li.appendChild(num);
           li.appendChild(name);
-          list.appendChild(li);
-        });
+          els.historyList.appendChild(li);
+        }
       }
     }
-
-    const TRACK_EMOJI = {
-      "Acorn Heights": "🌰", "Airship Fortress": "🛸", "Boo Cinema": "👻",
-      "Bowser's Castle": "🏰", "Cheep Cheep Falls": "🐟", "Choco Mountain": "🍫",
-      "Crown City": "👑", "Dandelion Depths": "🌼", "Desert Hills": "🏜️",
-      "Dino Dino Jungle": "🦕", "DK Pass": "🦍", "DK Spaceport": "🚀",
-      "Dry Bones Burnout": "💀", "Faraway Oasis": "🌴", "Great ? Block Ruins": "❓",
-      "Koopa Troopa Beach": "🐢", "Mario Bros. Circuit": "🍄", "Mario Circuit": "🍄",
-      "Moo Moo Meadows": "🐄", "Peach Beach": "🍑", "Peach Stadium": "🏟️",
-      "Rainbow Road": "🌈", "Salty Salty Speedway": "🌊", "Shy Guy Bazaar": "🎭",
-      "Sky-High Sundae": "🍦", "Starview Peak": "⭐", "Toad's Factory": "🏭",
-      "Wario Stadium": "💰", "Wario's Galleon": "⛵", "Whistlestop Summit": "🚂",
-    };
-
-    const TRACK_INFO = {
-      "Acorn Heights":        { region: "Forest",      dir: "N" },
-      "Airship Fortress":     { region: "Volcano",     dir: "NW" },
-      "Boo Cinema":           { region: "Forest",      dir: "N" },
-      "Bowser's Castle":      { region: "Volcano",     dir: "NW" },
-      "Cheep Cheep Falls":    { region: "Central",     dir: "C" },
-      "Choco Mountain":       { region: "Central",     dir: "C" },
-      "Crown City":           { region: "South Coast", dir: "S" },
-      "Dandelion Depths":     { region: "Central",     dir: "C" },
-      "Desert Hills":         { region: "Desert",      dir: "W" },
-      "Dino Dino Jungle":     { region: "Jungle",      dir: "SE" },
-      "DK Pass":              { region: "Snow",        dir: "NE" },
-      "DK Spaceport":         { region: "South Coast", dir: "S" },
-      "Dry Bones Burnout":    { region: "Volcano",     dir: "NW" },
-      "Faraway Oasis":        { region: "South Coast", dir: "S" },
-      "Great ? Block Ruins":  { region: "Jungle",      dir: "SE" },
-      "Koopa Troopa Beach":   { region: "South Coast", dir: "S" },
-      "Mario Bros. Circuit":  { region: "Badlands",    dir: "SW" },
-      "Mario Circuit":        { region: "Forest",      dir: "N" },
-      "Moo Moo Meadows":      { region: "Central",     dir: "C" },
-      "Peach Beach":          { region: "East Coast",  dir: "E" },
-      "Peach Stadium":        { region: "Central",     dir: "C" },
-      "Rainbow Road":         { region: "Central",     dir: "C" },
-      "Salty Salty Speedway": { region: "East Coast",  dir: "E" },
-      "Shy Guy Bazaar":       { region: "Desert",      dir: "W" },
-      "Sky-High Sundae":      { region: "Snow",        dir: "NE" },
-      "Starview Peak":        { region: "Snow",        dir: "NE" },
-      "Toad's Factory":       { region: "Volcano",     dir: "NW" },
-      "Wario Stadium":        { region: "Badlands",    dir: "SW" },
-      "Wario's Galleon":      { region: "East Coast",  dir: "E" },
-      "Whistlestop Summit":   { region: "Badlands",    dir: "SW" },
-    };
-
-    const CHARACTER_EMOJI = {
-      "Mario": "🍄", "Luigi": "💚", "Peach": "👸", "Bowser": "🐉",
-      "Yoshi": "🦎", "Toad": "🍄", "Daisy": "🌼", "Rosalina": "⭐",
-      "Donkey Kong": "🦍", "Wario": "💰", "Koopa Troopa": "🐢", "Pauline": "🎤",
-      "Waluigi": "💜", "Toadette": "🎀", "Baby Mario": "👶", "Baby Luigi": "👶",
-      "Baby Peach": "👶", "Baby Daisy": "👶", "Baby Rosalina": "👶", "Bowser Jr.": "🐢",
-      "Lakitu": "☁️", "King Boo": "👻", "Shy Guy": "🎭", "Birdo": "🎀",
-      "Dry Bones": "💀", "Wiggler": "🐛", "Hammer Bro": "🔨", "Chargin' Chuck": "🏈",
-      "Nabbit": "🐇", "Monty Mole": "🐾", "Goomba": "🍄", "Piranha Plant": "🌿",
-      "Pianta": "🌴", "Spike": "🔵", "Dolphin": "🐬", "Cow": "🐄",
-      "Pokey": "🌵", "Para-Biddybud": "🦋", "Penguin": "🐧", "Sidestepper": "🦀",
-      "Snowman": "⛄", "Cataquack": "🐤", "Fish Bone": "🐟", "Peepa": "👻",
-      "Swoop": "🦇", "Stingby": "🐝", "Rocky Wrench": "🔧", "Coin Coffer": "💰",
-      "Cheep Cheep": "🐠", "Conkdor": "🦅",
-    };
-
-    const VEHICLE_EMOJI = {
-      "Standard Kart": "🏎️", "Plushbuggy": "🚗", "Zoom Buggy": "🏎️",
-      "Rally Kart": "🏎️", "Baby Blooper": "🦑", "Chargin' Truck": "🚚",
-      "Blastronaut III": "🚀", "Roadster Royale": "🏎️", "Carpet Flyer": "🧹",
-      "Billdozer": "🚜", "Big Horn": "🚛", "Hot Rod": "🔥", "Snowmobile": "🛷",
-      "Frog Kart": "🐸", "Old Timey": "🚗", "Toy Truck": "🧸", "Green Saucer": "🛸",
-      "Pipe Frame": "🔧", "B Dasher": "🏎️", "Tiny Titan / Rally Romper": "🚗",
-      "Bumble V": "🐝", "Cloud 9": "☁️", "Biddybuggy": "🐞",
-      "Standard Bike": "🏍️", "Cute Scoot": "🛵", "Rally Bike": "🏍️",
-      "Mach Rocket": "🚀", "W-Twin Chopper": "🚁", "Fin Twin": "🏍️",
-      "Mario Bros. Bike": "🏍️", "Radio Bike": "📻", "Train Bike": "🚂",
-      "R. O. B. Bike": "🤖", "Dolphin Dasher": "🐬", "Bowser Bruiser": "🐢",
-      "Funky Dorrie": "🏄", "Lobster": "🦞", "Trike": "🚲",
-      "ATV Ski": "⛷️", "ATV Tread": "🚜",
-    };
 
     function pick(arr) {
       return arr[Math.floor(Math.random() * arr.length)];
@@ -613,21 +567,21 @@
     function rollCombo() {
       const char = pick(CHARACTERS);
       const vehicle = pick(VEHICLES);
-      document.getElementById('combo-character').textContent = `${CHARACTER_EMOJI[char] ?? '🎮'} ${char}`;
-      document.getElementById('combo-vehicle').textContent = `${VEHICLE_EMOJI[vehicle] ?? '🏎️'} ${vehicle}`;
+      els.comboCharacter.textContent = `${CHARACTER_DATA[char] ?? '🎮'} ${char}`;
+      els.comboVehicle.textContent = `${VEHICLE_DATA[vehicle] ?? '🏎️'} ${vehicle}`;
     }
 
     function openCombo() {
       rollCombo();
-      document.getElementById('modal-backdrop').classList.add('open');
+      els.modalBackdrop.classList.add('open');
     }
 
     function closeCombo() {
-      document.getElementById('modal-backdrop').classList.remove('open');
+      els.modalBackdrop.classList.remove('open');
     }
 
     function handleBackdropClick(e) {
-      if (e.target === document.getElementById('modal-backdrop')) closeCombo();
+      if (e.target === els.modalBackdrop) closeCombo();
     }
 
     let state = decodeState(location.hash) || loadState() || newSession();
